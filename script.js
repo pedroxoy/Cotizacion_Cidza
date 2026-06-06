@@ -150,7 +150,7 @@ function descargarPDF() {
 
   // Estilo de la tabla
   doc.autoTable({
-    head: [["Código", "Concepto", "Unidad", "Cantidad", "Precio", "Subtotal"]],
+    head: [["Código", "Descripción", "Presentación", "Cantidad", "Precio", "Subtotal"]],
     body: data,
     startY: 55,
     styles: { fontSize: 10, cellPadding: 2, textColor: [0,0,0], lineColor: [0,0,0], lineWidth: 0.2 },
