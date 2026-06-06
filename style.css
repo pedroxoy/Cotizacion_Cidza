@@ -1,8 +1,10 @@
+/* Estilos generales */
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
 }
 
+/* Encabezado con logos y datos */
 header {
   display: flex;
   justify-content: space-between;
@@ -31,6 +33,7 @@ header p {
   font-size: 12px;
 }
 
+/* Tabla de cotización */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -49,13 +52,33 @@ th {
   background: #f4f4f4;
 }
 
+/* Inputs y selects */
 input, select {
   width: 100%;
   padding: 5px;
+  box-sizing: border-box;
 }
 
+/* Botones */
 button {
   margin-top: 10px;
   padding: 8px 12px;
+  background-color: #004080;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
+
+button:hover {
+  background-color: #0066cc;
+}
+
+/* Total */
+h3 {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
 
