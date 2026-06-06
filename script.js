@@ -146,19 +146,55 @@ function descargarPDF() {
     data.push([codigo, area, unidad, cantidad, "Q" + precio, "Q" + subtotal]);
   });
 
-  doc.autoTable({
-    head: [["Código", "Concepto", "Unidad", "Cantidad", "Precio", "Subtotal"]],
-    body: data,
-    startY: 55,
-    styles: { fontSize: 10, cellPadding: 4 }
-  });
+ doc.autoTable({
+  head: [["Código", "Concepto", "Unidad", "Cantidad", "Precio", "Subtotal"]],
+  body: data,
+  startY: 55,
+  styles: { 
+    fontSize: 10, 
+    cellPadding: 2,          // menos espacio entre líneas
+    textColor: [0, 0, 0],    // texto negro
+    lineColor: [0, 0, 0],    // líneas negras
+    lineWidth: 0.2           // líneas más delgadas
+  },
+  headStyles: { 
+    fillColor: [255, 255, 255], // fondo blanco
+    textColor: [0, 0, 0],       // texto negro
+    fontStyle: 'bold',
+    lineWidth: 0.5
+  },
+  tableLineWidth: 0.3,
+  tableLineColor: [0, 0, 0],
+  theme: 'grid',               // estilo con cuadro exterior dividido por columnas
+  margin: { top: 55 },
+});
+
 
   let total = document.getElementById("total").textContent;
   doc.text(`TOTAL: Q${total}`, 14, doc.lastAutoTable.finalY + 10);
 
   // Información del vendedor al final
-  doc.setFontSize(10);
-  doc.text("Vendedor: Gerardo Lemús / Tel: +502 3024 4331", doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: "center" });
+doc.setFontSize(14); // más grande
+doc.setTextColor(0, 0, 0); // texto negro
+const vendedorTexto = "Vendedor: Gerardo Lemús / Tel: +502 3024 4331";
+
+// Posición centrada
+const pageWidth = doc.internal.pageSize.getWidth();
+const pageHeight = doc.internal.pageSize.getHeight();
+const yPos = pageHeight - 20;
+
+doc.text(vendedorTexto, pageWidth / 2, yPos, { align: "center" });
+
+// Calcular ancho del texto para dibujar las líneas
+const textWidth = doc.getTextWidth(vendedorTexto);
+const xStart = (pageWidth - textWidth) / 2;
+const xEnd = xStart + textWidth;
+
+// Dibujar dos líneas azules debajo del texto
+doc.setDrawColor(0, 0, 255); // azul
+doc.setLineWidth(0.5);
+doc.line(xStart, yPos + 2, xEnd, yPos + 2); // primera línea
+doc.line(xStart, yPos + 5, xEnd, yPos + 5); // segunda línea
 
   doc.save("cotizacion.pdf");
 }
