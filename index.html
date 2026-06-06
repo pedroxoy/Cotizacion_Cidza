@@ -3,26 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Cotización</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #f4f4f4; }
-    input, select { width: 100%; padding: 5px; }
-    button { margin-top: 10px; padding: 8px 12px; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-  <img src="img/Kat.png" alt="Logo Kat" style="height:80px;">
-  <div style="text-align:center;">
-    <h1 style="margin:0; font-size:20px; color:#004080;">CidZa, S.A.</h1>
-    <h2 style="margin:0; font-size:14px; font-weight:bold;">REPRESENTACIONES</h2>
-    <p style="margin:0; font-size:12px;">29 Avenida 30-46 zona 5, Colonia 20 de Octubre<br>Tel: 3404 7715 Xela 4469 1143</p>
-  </div>
-  <img src="img/llva.png" alt="Logo ILVA" style="height:80px;">
-</header>
+  <header>
+    <img src="img/Kat.png" alt="Logo Kat">
+    <div>
+      <h1>CidZa, S.A.</h1>
+      <h2>REPRESENTACIONES</h2>
+      <p>29 Avenida 30-46 zona 5, Colonia 20 de Octubre<br>Tel: 3404 7715 Xela 4469 1143</p>
+    </div>
+    <img src="img/Ilva.png" alt="Logo ILVA">
+  </header>
 
   <h2>Cotización</h2>
   <table id="cotizacion">
@@ -69,60 +62,7 @@
   <!-- Librerías jsPDF y autoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
-  <script>
-    function calcular() {
-      let filas = document.querySelectorAll("#cotizacion tbody tr");
-      let total = 0;
-      filas.forEach(fila => {
-        let cantidad = parseFloat(fila.cells[2].querySelector("input").value) || 0;
-        let precio = parseFloat(fila.cells[3].querySelector("input").value) || 0;
-        let subtotal = cantidad * precio;
-        fila.querySelector(".subtotal").textContent = subtotal.toFixed(2);
-        total += subtotal;
-      });
-      document.getElementById("total").textContent = total.toFixed(2);
-    }
-
-    function agregarFila() {
-      let tbody = document.querySelector("#cotizacion tbody");
-      let nuevaFila = tbody.rows[0].cloneNode(true);
-      nuevaFila.querySelectorAll("input").forEach(input => input.value = "");
-      nuevaFila.querySelector(".subtotal").textContent = "0";
-      tbody.appendChild(nuevaFila);
-    }
-
-    document.addEventListener("input", calcular);
-
-    function descargarPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      doc.setFontSize(16);
-      doc.text("Cotización", 14, 20);
-
-      let filas = document.querySelectorAll("#cotizacion tbody tr");
-      let data = [];
-      filas.forEach(fila => {
-        let area = fila.cells[0].querySelector("input").value || "-";
-        let unidad = fila.cells[1].querySelector("select").value;
-        let cantidad = fila.cells[2].querySelector("input").value || "0";
-        let precio = fila.cells[3].querySelector("input").value || "0";
-        let subtotal = fila.querySelector(".subtotal").textContent;
-        data.push([area, unidad, cantidad, "Q" + precio, "Q" + subtotal]);
-      });
-
-      doc.autoTable({
-        head: [["Concepto", "Unidad", "Cantidad", "Precio", "Subtotal"]],
-        body: data,
-        startY: 30,
-      });
-
-      let total = document.getElementById("total").textContent;
-      doc.text(`TOTAL: Q${total}`, 14, doc.lastAutoTable.finalY + 10);
-
-      doc.save("cotizacion.pdf");
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+
