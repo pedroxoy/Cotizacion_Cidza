@@ -3,8 +3,8 @@ function calcular() {
   let filas = document.querySelectorAll("#cotizacion tbody tr");
   let total = 0;
   filas.forEach(fila => {
-    let cantidad = parseFloat(fila.cells[2].querySelector("input").value) || 0;
-    let precio = parseFloat(fila.cells[3].querySelector("input").value) || 0;
+    let cantidad = parseFloat(fila.cells[3].querySelector("input").value) || 0;
+    let precio = parseFloat(fila.cells[4].querySelector("input").value) || 0;
     let subtotal = cantidad * precio;
     fila.querySelector(".subtotal").textContent = subtotal.toFixed(2);
     total += subtotal;
@@ -24,17 +24,15 @@ function agregarFila() {
 // Escuchar cambios en inputs
 document.addEventListener("input", calcular);
 
-// Función para descargar PDF con logos
+// Función para descargar PDF con logos y encabezado
 function descargarPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  // Aquí deberás convertir tus imágenes Kat.png e Ilva.png a base64
+  // Logos en base64 (pendiente de convertir Kat.png e Ilva.png)
   // Ejemplo:
   // const logoKat = "data:image/png;base64,...";
   // const logoIlva = "data:image/png;base64,...";
-
-  // Insertar logos en el PDF
   // doc.addImage(logoKat, "PNG", 10, 10, 40, 20);
   // doc.addImage(logoIlva, "PNG", 150, 10, 40, 20);
 
@@ -46,20 +44,21 @@ function descargarPDF() {
   doc.setFontSize(10);
   doc.text("29 Avenida 30-46 zona 5, Colonia 20 de Octubre Tel: 3404 7715 Xela 4469 1143", 80, 32);
 
-  // Tabla de cotización
+  // Tabla de cotización con columna Código
   let filas = document.querySelectorAll("#cotizacion tbody tr");
   let data = [];
   filas.forEach(fila => {
-    let area = fila.cells[0].querySelector("input").value || "-";
-    let unidad = fila.cells[1].querySelector("select").value;
-    let cantidad = fila.cells[2].querySelector("input").value || "0";
-    let precio = fila.cells[3].querySelector("input").value || "0";
+    let codigo = fila.cells[0].querySelector("input").value || "-";
+    let area = fila.cells[1].querySelector("input").value || "-";
+    let unidad = fila.cells[2].querySelector("select").value;
+    let cantidad = fila.cells[3].querySelector("input").value || "0";
+    let precio = fila.cells[4].querySelector("input").value || "0";
     let subtotal = fila.querySelector(".subtotal").textContent;
-    data.push([area, unidad, cantidad, "Q" + precio, "Q" + subtotal]);
+    data.push([codigo, area, unidad, cantidad, "Q" + precio, "Q" + subtotal]);
   });
 
   doc.autoTable({
-    head: [["Concepto", "Unidad", "Cantidad", "Precio", "Subtotal"]],
+    head: [["Código", "Concepto", "Unidad", "Cantidad", "Precio", "Subtotal"]],
     body: data,
     startY: 40,
     styles: { fontSize: 10, cellPadding: 4 }
@@ -70,4 +69,3 @@ function descargarPDF() {
 
   doc.save("cotizacion.pdf");
 }
-
