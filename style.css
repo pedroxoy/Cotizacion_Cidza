@@ -1,1 +1,11 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+header img { max-height: 80px; }
+header h1 { margin: 0; font-size: 20px; color: #004080; }
+header h2 { margin: 0; font-size: 14px; font-weight: bold; }
+header p { margin: 0; font-size: 12px; }
 
