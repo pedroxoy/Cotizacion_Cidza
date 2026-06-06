@@ -1,4 +1,4 @@
-  // Función para calcular subtotales y total
+ // Función para calcular subtotales y total
 function calcular() {
   let filas = document.querySelectorAll("#cotizacion tbody tr");
   let total = 0;
@@ -120,7 +120,7 @@ function descargarPDF() {
   doc.addImage(logoKat, "PNG", 10, 5, 25, 25);
   doc.addImage(logoIlva, "PNG", 170, 5, 25, 25);
 
-  // Encabezado centrado
+ // Encabezado centrado
   doc.setFontSize(16);
   doc.setTextColor(0, 0, 0); // negro
   doc.text("CidZa, S.A.", doc.internal.pageSize.getWidth() / 2, 20, { align: "center" });
@@ -156,7 +156,10 @@ function descargarPDF() {
   let total = document.getElementById("total").textContent;
   doc.text(`TOTAL: Q${total}`, 14, doc.lastAutoTable.finalY + 10);
 
+  // Información del vendedor al final
+  doc.setFontSize(10);
+  doc.text("Vendedor: Gerardo Lemús / Tel: +502 3024 4331", doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: "center" });
+
   doc.save("cotizacion.pdf");
 }
-
  
