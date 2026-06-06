@@ -30,8 +30,9 @@ function descargarPDF() {
   const doc = new jsPDF();
 
   // Aquí deberás convertir tus imágenes Kat.png e Ilva.png a base64
-  // Ejemplo: const logoKat = "data:image/png;base64,...";
-  // Ejemplo: const logoIlva = "data:image/png;base64,...";
+  // Ejemplo:
+  // const logoKat = "data:image/png;base64,...";
+  // const logoIlva = "data:image/png;base64,...";
 
   // Insertar logos en el PDF
   // doc.addImage(logoKat, "PNG", 10, 10, 40, 20);
@@ -39,9 +40,11 @@ function descargarPDF() {
 
   // Encabezado de empresa
   doc.setFontSize(16);
-  doc.text("CidZa, S.A. - REPRESENTACIONES", 70, 20);
+  doc.text("CidZa, S.A.", 80, 20);
+  doc.setFontSize(12);
+  doc.text("REPRESENTACIONES", 80, 26);
   doc.setFontSize(10);
-  doc.text("29 Avenida 30-46 zona 5, Colonia 20 de Octubre Tel: 3404 7715 Xela 4469 1143", 70, 26);
+  doc.text("29 Avenida 30-46 zona 5, Colonia 20 de Octubre Tel: 3404 7715 Xela 4469 1143", 80, 32);
 
   // Tabla de cotización
   let filas = document.querySelectorAll("#cotizacion tbody tr");
@@ -59,6 +62,7 @@ function descargarPDF() {
     head: [["Concepto", "Unidad", "Cantidad", "Precio", "Subtotal"]],
     body: data,
     startY: 40,
+    styles: { fontSize: 10, cellPadding: 4 }
   });
 
   let total = document.getElementById("total").textContent;
