@@ -7,6 +7,7 @@
 </head>
 <body>
 
+  <!-- Encabezado con logos y datos -->
   <header>
     <img src="img/Kat.png" alt="Logo Kat">
     <div>
@@ -21,6 +22,7 @@
   <table id="cotizacion">
     <thead>
       <tr>
+        <th>Código</th>
         <th>Área / Producto</th>
         <th>Unidad</th>
         <th>Cantidad</th>
@@ -30,23 +32,39 @@
     </thead>
     <tbody>
       <tr>
-        <td><input type="text" placeholder="Ej. Pared frontal"></td>
+        <!-- Columna Código con autocompletado -->
+        <td>
+          <input list="codigos" placeholder="Ej. TA901">
+          <datalist id="codigos">
+            <option value="TA901">
+            <option value="PA79">
+            <option value="PA420">
+            <option value="FA1905">
+            <option value="TO07">
+            <option value="TP21">
+            <option value="TX24">
+            <option value="TZ35">
+            <option value="TM84">
+            <option value="TS18">
+            <option value="TR1790">
+            <option value="TNS201">
+            <option value="PR30">
+            <option value="A090220">
+            <option value="EPL7914 P80">
+            <option value="DVAF600">
+          </datalist>
+        </td>
+        <!-- Área / Producto -->
+        <td><input type="text" placeholder="Ej. Fondo Poliuretano Transparente"></td>
+        <!-- Unidades reducidas -->
         <td>
           <select>
-            <option value="m2">m²</option>
-            <option value="m3">m3</option>
-            <option value="Ml">Ml</option>
-            <option value="yd2">yd²</option>
-            <option value="yd">yd</option>
-            <option value="ft2">ft²</option>
-            <option value="ft">ft</option>
-            <option value="Kg">Kg</option>
-            <option value="Lb">Lb</option>
-            <option value="Oz">Oz</option>
-            <option value="gr">gr</option>
-            <option value="pieza">pieza</option>
-            <option value="caja">caja</option>
-            <option value="unidad">unidad</option>
+            <option value="Cub25">Cub 25</option>
+            <option value="Cub12.5">Cub 12.5</option>
+            <option value="Galon">Galón</option>
+            <option value="Litro">Litro</option>
+            <option value="Gal5L">Gal 5L</option>
+            <option value="unidad">Unidad</option>
           </select>
         </td>
         <td><input type="number" value="0"></td>
@@ -55,6 +73,7 @@
       </tr>
     </tbody>
   </table>
+
   <button onclick="agregarFila()">Agregar fila</button>
   <button onclick="descargarPDF()">Descargar PDF</button>
   <h3>Total: Q<span id="total">0</span></h3>
@@ -65,4 +84,5 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
