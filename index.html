@@ -2,148 +2,96 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Cotización</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Cotizaciones - CIDZA</title>
+  <!-- Cargamos la librería para generar los PDFs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; color: #333; }
+    h1 { text-align: center; color: #003399; }
+    .seccion { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .campo { display: flex; flex-direction: column; }
+    .campo label { font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background-color: #003399; color: white; }
+    .btn { background-color: #003399; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .btn:hover { background-color: #002266; }
+    .btn-agregar { background-color: #28a745; margin-top: 10px; }
+    .btn-agregar:hover { background-color: #218838; }
+    .total-contenedor { text-align: right; margin-top: 15px; font-size: 18px; font-weight: bold; }
+    .input-tabla { width: 95%; border: none; background: transparent; }
+    .input-tabla:focus { outline: 1px solid #003399; background: #fff; }
+  </style>
 </head>
 <body>
 
-  <header>
-    <img src="img/Kat.png" alt="Logo Kat">
-    <div>
-      <h1>CidZa, S.A.</h1>
-      <h2>REPRESENTACIONES</h2>
-      <p>29 Avenida 30-46 zona 5, Colonia 20 de Octubre<br>Tel: 3404 7715 Xela 4469 1143</p>
+  <h1>Generador de Cotizaciones</h1>
+
+  <!-- DATOS DEL CLIENTE -->
+  <div class="seccion">
+    <h3>Datos del Cliente</h3>
+    <div class="grid-inputs">
+      <div class="campo"><label>Nombre:</label><input type="text" id="nombreCliente" placeholder="Ej. Sr. Rogelio Santos"></div>
+      <div class="campo"><label>Dirección:</label><input type="text" id="direccionCliente"></div>
+      <div class="campo"><label>Ciudad/Municipio:</label><input type="text" id="ciudadCliente"></div>
+      <div class="campo"><label>Departamento:</label><input type="text" id="estadoCliente"></div>
+      <div class="campo"><label>Teléfono:</label><input type="text" id="telefonoCliente"></div>
     </div>
-    <img src="img/Ilva.png" alt="Logo ILVA">
-  </header>
-
-  <h3>Datos del Cliente</h3>
-  <div class="cliente-form">
-    <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
-    <input type="text" id="direccionCliente" placeholder="Dirección">
-    <input type="text" id="ciudadCliente" placeholder="Ciudad">
-    <input type="text" id="estadoCliente" placeholder="Estado">
-    <input type="text" id="telefonoCliente" placeholder="Teléfono">
   </div>
-  
-  <h2>Cotización</h2>
-  <table id="cotizacion">
-    <thead>
-      <tr>
-        <th>Código</th>
-        <th>Descripción</th>
-        <th>Unidad</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-        <th>Subtotal</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><input type="text" class="input-codigo" list="codigos" placeholder="Ej. TA901"></td>
-        <td><input type="text" class="input-descripcion" placeholder="Ej. Fondo Poliuretano Transparente"></td>
-        <td>
-          <select class="select-unidad">
-            <option value="Cub25L">Cub 25L</option>
-            <option value="Cub25Kg">Cub 25Kg</option>
-            <option value="Cub12.5Lts">Cub 12.5Lts</option>
-            <option value="Galon">Galón</option>
-            <option value="Litro">Litro</option>
-            <option value="1Kg">1 Kg</option>
-            <option value="Gal5L">Gal 5L</option>
-            <option value="Gal5Kg">Gal 5Kg</option>
-            <option value="unidad">Unidad</option>
-          </select>
-        </td>
-        <td><input type="number" class="input-cantidad" value="0" min="0"></td>
-        <td><input type="number" class="input-precio" value="0" min="0" step="0.01"></td>
-        <td class="subtotal">0.00</td>
-      </tr>
-    </tbody>
-  </table>
 
-  <div class="acciones" style="margin-top: 15px;">
-    <button onclick="agregarFila()">Agregar fila</button>
-    <button onclick="descargarPDF()">Descargar PDF</button>
+  <!-- TABLA DE PRODUCTOS DE LA COTIZACIÓN -->
+  <div class="seccion">
+    <h3>Productos</h3>
+    <table id="cotizacion">
+      <thead>
+        <tr>
+          <th style="width: 12%;">Código</th>
+          <th style="width: 35%;">Descripción</th>
+          <th style="width: 18%;">Presentación</th>
+          <th style="width: 10%;">Cantidad</th>
+          <th style="width: 12%;">Precio (Q)</th>
+          <th style="width: 13%;">Subtotal (Q)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="text" class="input-tabla input-codigo" placeholder="Ej. TA901"></td>
+          <td><input type="text" class="input-tabla input-descripcion" placeholder="Descripción del producto"></td>
+          <td>
+            <!-- 🔹 MENÚ ACTUALIZADO: Vincula perfectamente con los valores del nuevo script.js -->
+            <select class="select-unidad" style="width: 100%;">
+              <option value="Litro">Litro</option>
+              <option value="Galon">Galón</option>
+              <option value="Cub25L">Cubeta 25 Lts</option>
+              <option value="Cub25Kg">Cubeta 25 Kg</option>
+              <option value="Cub12.5Lts">Cubeta 12.5 Lts</option>
+              <option value="unidad">Unidad (Lijas/Esponjas)</option>
+            </select>
+          </td>
+          <td><input type="number" class="input-tabla input-cantidad" value="0" min="0"></td>
+          <td><input type="number" class="input-tabla input-precio" value="0" step="0.01"></td>
+          <td>Q <span class="subtotal">0.00</span></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <button class="btn btn-agregar" onclick="agregarFila()">+ Agregar Producto</button>
   </div>
-  
-  <h3>Total: Q <span id="total">0.00</span></h3>
 
-  <datalist id="codigos">
-    <option value="TA901">
-    <option value="PA79">
-    <option value="PA420">
-    <option value="PA80">
-    <option value="PA81">
-    <option value="PA82">
-    <option value="FA1905">
-    <option value="FA1910">
-    <option value="FA1930">
-    <option value="FA1950">
-    <option value="FAB050">
-    <option value="FAB015">
-    <option value="TO07">
-    <option value="TO06">
-    <option value="TO01">
-    <option value="TP21">
-    <option value="TP20">
-    <option value="TO995">
-    <option value="TO993">
-    <option value="PLM5A014">
-    <option value="PM571">
-    <option value="TO0761">
-    <option value="TP2061">
-    <option value="TF25">
-    <option value="TV19">
-    <option value="TX24">
-    <option value="TX30">
-    <option value="TX72">
-    <option value="TX75">
-    <option value="TX90">
-    <option value="TZ35">
-    <option value="TM84">
-    <option value="TM80">
-    <option value="TM893">
-    <option value="TM896">
-    <option value="TS18">
-    <option value="TS1806">
-    <option value="TSM1V670">
-    <option value="TDS500">
-    <option value="TTM502B">
-    <option value="TTM5023">
-    <option value="TOM5186">
-    <option value="TR1790">
-    <option value="TG57">
-    <option value="TVS5AA1">
-    <option value="TV8002">
-    <option value="TNS201">
-    <option value="PR30">
-    <option value="HTM063">
-    <option value="HTM5058">
-    <option value="HTM5933">
-    <option value="WTM5883">
-    <option value="TW646">
-    <option value="TW642">
-    <option value="TXW13">
-    <option value="HMTXX">
-    <option value="A090220">
-    <option value="A090320">
-    <option value="EKAWETP400">
-    <option value="EPL7914P80">
-    <option value="EPL7914P100">
-    <option value="EPL7914P120">
-    <option value="ETAC7809">
-    <option value="ETAC7907">
-    <option value="ETAC7908">
-    <option value="DVAF600P60">
-    <option value="DVAF600P80">
-    <option value="DVAF600P100">
-    <option value="DVAF600P120">
-    <option value="DVAF600P220">
-  </datalist>
+  <!-- CONTENEDOR DEL TOTAL Y GENERAR ACCIÓN -->
+  <div class="seccion" style="display: flex; justify-content: space-between; align-items: center;">
+    <button class="btn" onclick="descargarPDF()">Descargar Cotización (PDF)</button>
+    <div class="total-contenedor">
+      TOTAL: Q <span id="total">0.00</span>
+    </div>
+  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <!-- Vinculamos el archivo de comportamiento -->
   <script src="script.js"></script>
 </body>
 </html>
