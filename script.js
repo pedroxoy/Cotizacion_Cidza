@@ -195,64 +195,65 @@ doc.autoTable({
   theme: 'plain'
 });
 
-  // Tabla de cotización
-  let filas = document.querySelectorAll("#cotizacion tbody tr");
-  let data = [];
-  filas.forEach(fila => {
-    let codigo = fila.cells[0].querySelector("input").value || "-";
-    let area = fila.cells[1].querySelector("input").value || "-";
-    let unidad = fila.cells[2].querySelector("select").value;
-    let cantidad = parseFloat(fila.cells[3].querySelector("input").value) || 0;
-    let precio = parseFloat(fila.cells[4].querySelector("input").value) || 0;
-    let subtotal = parseFloat(fila.querySelector(".subtotal").textContent) || 0;
+// 🔹 Paso 5: Tabla de productos
+let filas = document.querySelectorAll("#cotizacion tbody tr");
+let data = [];
 
-    // Formatear con separador de miles
-    let precioFormateado = precio.toLocaleString("es-GT");
-    let subtotalFormateado = subtotal.toLocaleString("es-GT");
+filas.forEach(fila => {
+  let codigo = fila.cells[0].querySelector("input").value || "-";
+  let descripcion = fila.cells[1].querySelector("input").value || "-";
+  let unidad = fila.cells[2].querySelector("select").value || "-";
+  let cantidad = parseFloat(fila.cells[3].querySelector("input").value) || 0;
+  let precio = parseFloat(fila.cells[4].querySelector("input").value) || 0;
+  let subtotal = parseFloat(fila.querySelector(".subtotal").textContent) || 0;
 
-    data.push([codigo, area, unidad, cantidad, "Q" + precioFormateado, "Q" + subtotalFormateado]);
-  });
+  // Formatear con separador de miles
+  let precioFormateado = precio.toLocaleString("es-GT");
+  let subtotalFormateado = subtotal.toLocaleString("es-GT");
 
-  // Estilo de la tabla
-  doc.autoTable({
-    head: [["Código", "Descripción", "Presentación", "Cantidad", "Precio", "Subtotal"]],
-    body: data,
-    startY: 55,
-    styles: { fontSize: 10, cellPadding: 2, textColor: [0,0,0], lineColor: [0,0,0], lineWidth: 0.2 },
-    headStyles: { fillColor: [255,255,255], textColor: [0,0,0], fontStyle: 'bold', lineWidth: 0.5 },
-    tableLineWidth: 0.3,
-    tableLineColor: [0,0,0],
-    theme: 'grid',
-    margin: { top: 55 },
-  });
+  // Agregar fila al arreglo
+  data.push([codigo, descripcion, unidad, cantidad, "Q" + precioFormateado, "Q" + subtotalFormateado]);
+});
 
-  // Total formateado
-  let total = parseFloat(document.getElementById("total").textContent) || 0;
-  let totalFormateado = total.toLocaleString("es-GT");
-  doc.text(`TOTAL: Q${totalFormateado}`, 14, doc.lastAutoTable.finalY + 10);
+doc.autoTable({
+  startY: doc.lastAutoTable.finalY + 15,
+  head: [["Código", "Descripción", "Presentación", "Cantidad", "Precio", "Subtotal"]],
+  body: data,
+  styles: { fontSize: 10, cellPadding: 2, textColor: [0,0,0], lineColor: [0,0,0], lineWidth: 0.2 },
+  headStyles: { fillColor: [255,255,255], textColor: [0,0,0], fontStyle: 'bold', lineWidth: 0.5 },
+  tableLineWidth: 0.3,
+  tableLineColor: [0,0,0],
+  theme: 'grid'
+});
 
-  // Información del vendedor al final
-  doc.setFontSize(14); // más grande
-  doc.setTextColor(0, 0, 0); // texto negro
-  const vendedorTexto = "Vendedor: Gerardo Lemús / Tel: +502 3024 4331";
+// 🔹 Paso 6: Total formateado
+let total = parseFloat(document.getElementById("total").textContent) || 0;
+let totalFormateado = total.toLocaleString("es-GT");
+doc.setFontSize(11);
+doc.setFont("helvetica", "bold");
+doc.text(`TOTAL: Q${totalFormateado}`, 14, doc.lastAutoTable.finalY + 10);
 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const yPos = pageHeight - 20;
+// 🔹 Paso 7: Información del vendedor al final
+doc.setFontSize(14); // más grande
+doc.setTextColor(0, 0, 0); // texto negro
+const vendedorTexto = "Vendedor: Gerardo Lemús / Tel: +502 3024 4331";
 
-  doc.text(vendedorTexto, pageWidth / 2, yPos, { align: "center" });
+const pageWidth = doc.internal.pageSize.getWidth();
+const pageHeight = doc.internal.pageSize.getHeight();
+const yPos = pageHeight - 20;
 
-  // Calcular ancho del texto para dibujar las líneas
-  const textWidth = doc.getTextWidth(vendedorTexto);
-  const xStart = (pageWidth - textWidth) / 2;
-  const xEnd = xStart + textWidth;
+doc.text(vendedorTexto, pageWidth / 2, yPos, { align: "center" });
 
-  // Dibujar dos líneas azules debajo del texto
-  doc.setDrawColor(0, 0, 255);
-  doc.setLineWidth(0.5);
-  doc.line(xStart, yPos + 2, xEnd, yPos + 2);
-  doc.line(xStart, yPos + 5, xEnd, yPos + 5);
+// Calcular ancho del texto para dibujar las líneas
+const textWidth = doc.getTextWidth(vendedorTexto);
+const xStart = (pageWidth - textWidth) / 2;
+const xEnd = xStart + textWidth;
 
-  // Guardar PDF
-  doc.save("cotizacion.pdf");
-}
+// Dibujar dos líneas azules debajo del texto
+doc.setDrawColor(0, 0, 255);
+doc.setLineWidth(0.5);
+doc.line(xStart, yPos + 2, xEnd, yPos + 2);
+doc.line(xStart, yPos + 5, xEnd, yPos + 5);
+
+// 🔹 Guardar PDF
+doc.save("cotizacion.pdf");
