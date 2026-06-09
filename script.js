@@ -121,14 +121,79 @@ function descargarPDF() {
   doc.addImage(logoKat, "PNG", 10, 5, 25, 25);
   doc.addImage(logoIlva, "PNG", 170, 5, 25, 25);
 
-  // Encabezado
-  doc.setFontSize(16);
-  doc.text("CidZa, S.A.", doc.internal.pageSize.getWidth() / 2, 20, { align: "center" });
-  doc.setFontSize(12);
-  doc.text("REPRESENTACIONES", doc.internal.pageSize.getWidth() / 2, 28, { align: "center" });
-  doc.setFontSize(10);
-  doc.text("29 Avenida 30-46 zona 5, Colonia 20 de Octubre", doc.internal.pageSize.getWidth() / 2, 36, { align: "center" });
-  doc.text("Tel: 3404 7715 Xela 4469 1143", doc.internal.pageSize.getWidth() / 2, 44, { align: "center" });
+  // Encabezado corporativo
+doc.setFontSize(14);
+doc.setFont("helvetica", "bold");
+doc.text("REPRESENTACIONES CIDZA, S.A.", doc.internal.pageSize.getWidth() / 2, 20, { align: "center" });
+
+doc.setFontSize(10);
+doc.setFont("helvetica", "normal");
+doc.text("29 Avenida 30-46 Zona 5, Colonia 20 de Octubre, Guatemala", doc.internal.pageSize.getWidth() / 2, 26, { align: "center" });
+doc.text("NIT: 105445568", doc.internal.pageSize.getWidth() / 2, 32, { align: "center" });
+doc.text("Tel.: 3404-7715 / 4469-1143", doc.internal.pageSize.getWidth() / 2, 38, { align: "center" });
+
+  // 🔹 Paso 2: Bloque de datos de la cotización
+doc.setFontSize(12);
+doc.setFont("helvetica", "bold");
+doc.text("COTIZACIÓN", doc.internal.pageSize.getWidth() / 2, 48, { align: "center" });
+
+doc.setFontSize(10);
+doc.setFont("helvetica", "normal");
+doc.text("Lugar y Fecha:", 14, 58);
+doc.text("Guatemala, 25 de mayo de 2026", 60, 58); // <- aquí luego lo hacemos dinámico
+
+doc.autoTable({
+  startY: 64,
+  body: [
+    ["No. Pedido", "31-2505"],
+    ["Compras", "Sr. Rogelio Santos"],
+    ["CC", ""],
+    ["", ""]
+  ],
+  styles: { fontSize: 10, cellPadding: 2, textColor: [0,0,0], lineColor: [0,0,0], lineWidth: 0.2 },
+  theme: 'plain'
+});
+
+ // 🔹 Paso 3: Bloque de datos del cliente
+let nombreCliente = document.getElementById("nombreCliente").value || "";
+let direccionCliente = document.getElementById("direccionCliente").value || "";
+let ciudadCliente = document.getElementById("ciudadCliente").value || "";
+let estadoCliente = document.getElementById("estadoCliente").value || "";
+let telefonoCliente = document.getElementById("telefonoCliente").value || "";
+
+doc.setFontSize(11);
+doc.setFont("helvetica", "bold");
+doc.text("Datos del Cliente", 14, doc.lastAutoTable.finalY + 10);
+
+doc.autoTable({
+  startY: doc.lastAutoTable.finalY + 15,
+  body: [
+    ["Nombre", nombreCliente],
+    ["Dirección", direccionCliente],
+    ["Ciudad", ciudadCliente],
+    ["Estado", estadoCliente],
+    ["Teléfono", telefonoCliente]
+  ],
+  styles: { fontSize: 10, cellPadding: 2, textColor: [0,0,0], lineColor: [0,0,0], lineWidth: 0.2 },
+  theme: 'plain'
+});
+  
+  // 🔹 Paso 4: Bloque del vendedor
+doc.setFontSize(11);
+doc.setFont("helvetica", "bold");
+doc.text("Datos del Vendedor", 14, doc.lastAutoTable.finalY + 10);
+
+doc.autoTable({
+  startY: doc.lastAutoTable.finalY + 15,
+  body: [
+    ["Vendedor", "Gerardo Lemus"],
+    ["Puesto", "Vendedor"],
+    ["Teléfono", "3024-4331"],
+    ["Email", "info@cidza.com.gt"]
+  ],
+  styles: { fontSize: 10, cellPadding: 2, textColor: [0,0,0], lineColor: [0,0,0], lineWidth: 0.2 },
+  theme: 'plain'
+});
 
   // Tabla de cotización
   let filas = document.querySelectorAll("#cotizacion tbody tr");
