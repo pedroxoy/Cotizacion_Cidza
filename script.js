@@ -233,6 +233,20 @@ doc.setFontSize(11);
 doc.setFont("helvetica", "bold");
 doc.text(`TOTAL: Q${totalFormateado}`, 14, doc.lastAutoTable.finalY + 10);
 
+// 🔹 Vigencia de la cotización (15 días)
+let fechaActual = new Date();
+let fechaVencimiento = new Date();
+fechaVencimiento.setDate(fechaActual.getDate() + 15);
+
+let dia = fechaVencimiento.getDate().toString().padStart(2, '0');
+let mes = (fechaVencimiento.getMonth() + 1).toString().padStart(2, '0');
+let anio = fechaVencimiento.getFullYear();
+let fechaFormateada = `${dia}/${mes}/${anio}`;
+
+doc.setFontSize(10);
+doc.setFont("helvetica", "italic");
+doc.text(`Esta cotización será válida hasta: ${fechaFormateada}`, 14, doc.lastAutoTable.finalY + 20);
+
 // 🔹 Paso 7: Información del vendedor al final
 doc.setFontSize(14); // más grande
 doc.setTextColor(0, 0, 0); // texto negro
