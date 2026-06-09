@@ -19,21 +19,21 @@
   </header>
 
   <!-- Bloque de datos del cliente -->
-<h3>Datos del Cliente</h3>
-<div class="cliente-form">
-  <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
-  <input type="text" id="direccionCliente" placeholder="Dirección">
-  <input type="text" id="ciudadCliente" placeholder="Ciudad">
-  <input type="text" id="estadoCliente" placeholder="Estado">
-  <input type="text" id="telefonoCliente" placeholder="Teléfono">
-</div>
+  <h3>Datos del Cliente</h3>
+  <div class="cliente-form">
+    <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
+    <input type="text" id="direccionCliente" placeholder="Dirección">
+    <input type="text" id="ciudadCliente" placeholder="Ciudad">
+    <input type="text" id="estadoCliente" placeholder="Estado">
+    <input type="text" id="telefonoCliente" placeholder="Teléfono">
+  </div>
   
   <h2>Cotización</h2>
   <table id="cotizacion">
     <thead>
       <tr>
         <th>Código</th>
-        <th>Descripcion</th>
+        <th>Descripción</th>
         <th>Unidad</th>
         <th>Cantidad</th>
         <th>Precio</th>
@@ -43,84 +43,10 @@
     <tbody>
       <tr>
         <!-- Columna Código con autocompletado -->
-        <td>
-          <input list="codigos" placeholder="Ej. TA901">
-         <datalist id="codigos">
-  <option value="TA901">
-  <option value="PA79">
-  <option value="PA420">
-  <option value="PA80">
-  <option value="PA81">
-  <option value="PA82">
-  <option value="FA1905">
-  <option value="FA1910">
-  <option value="FA1930">
-  <option value="FA1950">
-  <option value="FAB050">
-  <option value="FAB015">
-  <option value="TO07">
-  <option value="TO06">
-  <option value="TO01">
-  <option value="TP21">
-  <option value="TP20">
-  <option value="TO995">
-  <option value="TO993">
-  <option value="PLM5A014">
-  <option value="PM571">
-  <option value="TO0761">
-  <option value="TP2061">
-  <option value="TF25">
-  <option value="TV19">
-  <option value="TX24">
-  <option value="TX30">
-  <option value="TX72">
-  <option value="TX75">
-  <option value="TX90">
-  <option value="TZ35">
-  <option value="TM84">
-  <option value="TM80">
-  <option value="TM893">
-  <option value="TM896">
-  <option value="TS18">
-  <option value="TS1806">
-  <option value="TSM1V670">
-  <option value="TDS500">
-  <option value="TTM502B">
-  <option value="TTM5023">
-  <option value="TOM5186">
-  <option value="TR1790">
-  <option value="TG57">
-  <option value="TVS5AA1">
-  <option value="TV8002">
-  <option value="TNS201">
-  <option value="PR30">
-  <option value="HTM063">
-  <option value="HTM5058">
-  <option value="HTM5933">
-  <option value="WTM5883">
-  <option value="TW646">
-  <option value="TW642">
-  <option value="TXW13">
-  <option value="HMTXX">
-  <option value="A090220">
-  <option value="A090320">
-  <option value="EKAWETP400">
-  <option value="EPL7914P80">
-  <option value="EPL7914P100">
-  <option value="EPL7914P120">
-  <option value="ETAC7809">
-  <option value="ETAC7907">
-  <option value="ETAC7908">
-  <option value="DVAF600P60">
-  <option value="DVAF600P80">
-  <option value="DVAF600P100">
-  <option value="DVAF600P120">
-  <option value="DVAF600P220">
-</datalist>
-        </td>
+        <td><input list="codigos" placeholder="Ej. TA901"></td>
         <!-- Área / Producto -->
         <td><input type="text" placeholder="Ej. Fondo Poliuretano Transparente"></td>
-        <!-- Unidades reducidas -->
+        <!-- Unidades -->
         <td>
           <select>
             <option value="Cub25L">Cub 25L</option>
@@ -145,11 +71,84 @@
   <button onclick="descargarPDF()">Descargar PDF</button>
   <h3>Total: Q<span id="total">0</span></h3>
 
+  <!-- Datalist global (fuera de la tabla) -->
+  <datalist id="codigos">
+    <option value="TA901">
+    <option value="PA79">
+    <option value="PA420">
+    <option value="PA80">
+    <option value="PA81">
+    <option value="PA82">
+    <option value="FA1905">
+    <option value="FA1910">
+    <option value="FA1930">
+    <option value="FA1950">
+    <option value="FAB050">
+    <option value="FAB015">
+    <option value="TO07">
+    <option value="TO06">
+    <option value="TO01">
+    <option value="TP21">
+    <option value="TP20">
+    <option value="TO995">
+    <option value="TO993">
+    <option value="PLM5A014">
+    <option value="PM571">
+    <option value="TO0761">
+    <option value="TP2061">
+    <option value="TF25">
+    <option value="TV19">
+    <option value="TX24">
+    <option value="TX30">
+    <option value="TX72">
+    <option value="TX75">
+    <option value="TX90">
+    <option value="TZ35">
+    <option value="TM84">
+    <option value="TM80">
+    <option value="TM893">
+    <option value="TM896">
+    <option value="TS18">
+    <option value="TS1806">
+    <option value="TSM1V670">
+    <option value="TDS500">
+    <option value="TTM502B">
+    <option value="TTM5023">
+    <option value="TOM5186">
+    <option value="TR1790">
+    <option value="TG57">
+    <option value="TVS5AA1">
+    <option value="TV8002">
+    <option value="TNS201">
+    <option value="PR30">
+    <option value="HTM063">
+    <option value="HTM5058">
+    <option value="HTM5933">
+    <option value="WTM5883">
+    <option value="TW646">
+    <option value="TW642">
+    <option value="TXW13">
+    <option value="HMTXX">
+    <option value="A090220">
+    <option value="A090320">
+    <option value="EKAWETP400">
+    <option value="EPL7914P80">
+    <option value="EPL7914P100">
+    <option value="EPL7914P120">
+    <option value="ETAC7809">
+    <option value="ETAC7907">
+    <option value="ETAC7908">
+    <option value="DVAF600P60">
+    <option value="DVAF600P80">
+    <option value="DVAF600P100">
+    <option value="DVAF600P120">
+    <option value="DVAF600P220">
+  </datalist>
+
   <!-- Librerías jsPDF y autoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
-
 
