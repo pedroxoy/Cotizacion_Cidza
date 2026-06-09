@@ -7,7 +7,6 @@
 </head>
 <body>
 
-  <!-- Encabezado con logos y datos -->
   <header>
     <img src="img/Kat.png" alt="Logo Kat">
     <div>
@@ -18,7 +17,6 @@
     <img src="img/Ilva.png" alt="Logo ILVA">
   </header>
 
-  <!-- Bloque de datos del cliente -->
   <h3>Datos del Cliente</h3>
   <div class="cliente-form">
     <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
@@ -42,13 +40,10 @@
     </thead>
     <tbody>
       <tr>
-        <!-- Columna Código con autocompletado -->
-        <td><input list="codigos" placeholder="Ej. TA901"></td>
-        <!-- Área / Producto -->
-        <td><input type="text" placeholder="Ej. Fondo Poliuretano Transparente"></td>
-        <!-- Unidades -->
+        <td><input type="text" class="input-codigo" list="codigos" placeholder="Ej. TA901"></td>
+        <td><input type="text" class="input-descripcion" placeholder="Ej. Fondo Poliuretano Transparente"></td>
         <td>
-          <select>
+          <select class="select-unidad">
             <option value="Cub25L">Cub 25L</option>
             <option value="Cub25Kg">Cub 25Kg</option>
             <option value="Cub12.5Lts">Cub 12.5Lts</option>
@@ -60,18 +55,20 @@
             <option value="unidad">Unidad</option>
           </select>
         </td>
-        <td><input type="number" value="0"></td>
-        <td><input type="number" value="0"></td>
-        <td class="subtotal">0</td>
+        <td><input type="number" class="input-cantidad" value="0" min="0"></td>
+        <td><input type="number" class="input-precio" value="0" min="0" step="0.01"></td>
+        <td class="subtotal">0.00</td>
       </tr>
     </tbody>
   </table>
 
-  <button onclick="agregarFila()">Agregar fila</button>
-  <button onclick="descargarPDF()">Descargar PDF</button>
-  <h3>Total: Q<span id="total">0</span></h3>
+  <div class="acciones" style="margin-top: 15px;">
+    <button onclick="agregarFila()">Agregar fila</button>
+    <button onclick="descargarPDF()">Descargar PDF</button>
+  </div>
+  
+  <h3>Total: Q <span id="total">0.00</span></h3>
 
-  <!-- Datalist global (fuera de la tabla) -->
   <datalist id="codigos">
     <option value="TA901">
     <option value="PA79">
@@ -145,10 +142,8 @@
     <option value="DVAF600P220">
   </datalist>
 
-  <!-- Librerías jsPDF y autoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
-
