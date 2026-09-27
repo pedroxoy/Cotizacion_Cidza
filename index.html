@@ -1,97 +1,360 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Cotizaciones - CIDZA</title>
-  <!-- Cargamos la librería para generar los PDFs -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-  
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; color: #333; }
-    h1 { text-align: center; color: #003399; }
-    .seccion { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-    .campo { display: flex; flex-direction: column; }
-    .campo label { font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-    input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-    th { background-color: #003399; color: white; }
-    .btn { background-color: #003399; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .btn:hover { background-color: #002266; }
-    .btn-agregar { background-color: #28a745; margin-top: 10px; }
-    .btn-agregar:hover { background-color: #218838; }
-    .total-contenedor { text-align: right; margin-top: 15px; font-size: 18px; font-weight: bold; }
-    .input-tabla { width: 95%; border: none; background: transparent; }
-    .input-tabla:focus { outline: 1px solid #003399; background: #fff; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Catálogo Completo BRANOX</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .canvas {
+            width: 800px;
+            background-color: #ffffff;
+            padding: 40px;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #2b2b2b;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            font-size: 36px;
+            margin: 0;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+        }
+        .header p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #555555;
+        }
+        .info-bar {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #334155;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .section-header {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .banner-eco {
+            background-color: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 10px 15px;
+            font-size: 12px;
+            color: #15803d;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+        th {
+            background-color: #f1f5f9;
+            color: #334155;
+            text-align: left;
+            padding: 8px;
+            border-bottom: 2px solid #cbd5e1;
+            font-weight: bold;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+        .item-list li {
+            padding: 6px 8px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+        }
+        .item-list li:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .price {
+            font-weight: bold;
+            color: #0f172a;
+        }
+        .savings {
+            color: #16a34a;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 15px;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Generador de Cotizaciones</h1>
+<div class="canvas">
 
-  <!-- DATOS DEL CLIENTE -->
-  <div class="seccion">
-    <h3>Datos del Cliente</h3>
-    <div class="grid-inputs">
-      <div class="campo"><label>Nombre:</label><input type="text" id="nombreCliente" placeholder="Ej. Sr. Rogelio Santos"></div>
-      <div class="campo"><label>Dirección:</label><input type="text" id="direccionCliente"></div>
-      <div class="campo"><label>Ciudad/Municipio:</label><input type="text" id="ciudadCliente"></div>
-      <div class="campo"><label>Departamento:</label><input type="text" id="estadoCliente"></div>
-      <div class="campo"><label>Teléfono:</label><input type="text" id="telefonoCliente"></div>
+    <!-- ENCABEZADO -->
+    <div class="header">
+        <h1>BRANOX</h1>
+        <p><strong>Fórmulas de Alto Rendimiento | Limpieza Total y Cuidado Personal</strong></p>
+        <p>Diagonal 5, 3-05 zona 7, Residenciales Imperial, Cobán, Alta Verapaz (A 2 cuadras de Cardegua)</p>
     </div>
-  </div>
 
-  <!-- TABLA DE PRODUCTOS DE LA COTIZACIÓN -->
-  <div class="seccion">
-    <h3>Productos</h3>
-    <table id="cotizacion">
-      <thead>
-        <tr>
-          <th style="width: 12%;">Código</th>
-          <th style="width: 35%;">Descripción</th>
-          <th style="width: 18%;">Presentación</th>
-          <th style="width: 10%;">Cantidad</th>
-          <th style="width: 12%;">Precio (Q)</th>
-          <th style="width: 13%;">Subtotal (Q)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><input type="text" class="input-tabla input-codigo" placeholder="Ej. TA901"></td>
-          <td><input type="text" class="input-tabla input-descripcion" placeholder="Descripción del producto"></td>
-          <td>
-            <!-- 🔹 MENÚ ACTUALIZADO: Vincula perfectamente con los valores del nuevo script.js -->
-            <select class="select-unidad" style="width: 100%;">
-              <option value="Litro">Litro</option>
-              <option value="Galon">Galón</option>
-              <option value="Cub25L">Cubeta 25 Lts</option>
-              <option value="Cub25Kg">Cubeta 25 Kg</option>
-              <option value="Cub12.5Lts">Cubeta 12.5 Lts</option>
-              <option value="unidad">Unidad (Lijas/Esponjas)</option>
-            </select>
-          </td>
-          <td><input type="number" class="input-tabla input-cantidad" value="0" min="0"></td>
-          <td><input type="number" class="input-tabla input-precio" value="0" step="0.01"></td>
-          <td>Q <span class="subtotal">0.00</span></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="info-bar">
+        📞 <strong>Atención y WhatsApp:</strong> +502 5714-4147 / +502 3809-9190 &nbsp;|&nbsp; 🌐 <strong>Tienda:</strong> app.recurrente.com/s/branox<br>
+        💳 <strong>Aceptamos:</strong> Efectivo, Transferencia Bancaria y Pagos con Tarjeta
+    </div>
+
+    <!-- SECCIÓN 1: ASEO DEL HOGAR -->
+    <div class="section-header">1. Productos de Aseo y Limpieza del Hogar</div>
     
-    <button class="btn btn-agregar" onclick="agregarFila()">+ Agregar Producto</button>
-  </div>
-
-  <!-- CONTENEDOR DEL TOTAL Y GENERAR ACCIÓN -->
-  <div class="seccion" style="display: flex; justify-content: space-between; align-items: center;">
-    <button class="btn" onclick="descargarPDF()">Descargar Cotización (PDF)</button>
-    <div class="total-contenedor">
-      TOTAL: Q <span id="total">0.00</span>
+    <div class="banner-eco">
+        🌱 ¡Modalidad Eco-Ahorro! Trae tu propio recipiente y ahorra en tu recarga con nuestros precios de Relleno Directo.
     </div>
-  </div>
 
-  <!-- Vinculamos el archivo de comportamiento -->
-  <script src="script.js"></script>
+    <table>
+        <thead>
+            <tr>
+                <th>Producto y Variedades</th>
+                <th>Presentación</th>
+                <th>Con Envase</th>
+                <th>Relleno (Sin Envase)</th>
+                <th>Ahorro</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- DETERGENTE -->
+            <tr>
+                <td rowspan="4"><strong>Detergente Líquido</strong><br><small>Aromas: Naranja, Floral, Fresh Spring</small></td>
+                <td>1 Litro</td>
+                <td>Q18.00</td>
+                <td class="price">Q10.00</td>
+                <td class="savings">Ahorras Q8.00</td>
+            </tr>
+            <tr>
+                <td>2 Litros</td>
+                <td>Q35.00</td>
+                <td class="price">Q20.00</td>
+                <td class="savings">Ahorras Q15.00</td>
+            </tr>
+            <tr>
+                <td>Galón (4 L)</td>
+                <td>Q60.00</td>
+                <td class="price">Q40.00</td>
+                <td class="savings">Ahorras Q20.00</td>
+            </tr>
+            <tr>
+                <td>Garrafa (20 L)</td>
+                <td>Q220.00</td>
+                <td class="price">Q180.00</td>
+                <td class="savings">Ahorras Q40.00</td>
+            </tr>
+            <!-- SUAVIZANTE -->
+            <tr>
+                <td rowspan="4"><strong>Suavizante de Ropa</strong><br><small>Aromas: Soft Caress, Talc, Flor de Manzana</small></td>
+                <td>1 Litro</td>
+                <td>Q18.00</td>
+                <td class="price">Q10.00</td>
+                <td class="savings">Ahorras Q8.00</td>
+            </tr>
+            <tr>
+                <td>2 Litros</td>
+                <td>Q35.00</td>
+                <td class="price">Q20.00</td>
+                <td class="savings">Ahorras Q15.00</td>
+            </tr>
+            <tr>
+                <td>Galón (4 L)</td>
+                <td>Q60.00</td>
+                <td class="price">Q40.00</td>
+                <td class="savings">Ahorras Q20.00</td>
+            </tr>
+            <tr>
+                <td>Garrafa (20 L)</td>
+                <td>Q220.00</td>
+                <td class="price">Q180.00</td>
+                <td class="savings">Ahorras Q40.00</td>
+            </tr>
+            <!-- DESINFECTANTE -->
+            <tr>
+                <td rowspan="4"><strong>Desinfectante Multiusos</strong><br><small>Aromas: Pino Fresco, Limón, Almendras Amargas</small></td>
+                <td>1 Litro</td>
+                <td>Q9.00</td>
+                <td class="price">Q5.50</td>
+                <td class="savings">Ahorras Q3.50</td>
+            </tr>
+            <tr>
+                <td>2 Litros</td>
+                <td>Q15.50</td>
+                <td class="price">Q11.00</td>
+                <td class="savings">Ahorras Q4.50</td>
+            </tr>
+            <tr>
+                <td>Galón (4 L)</td>
+                <td>Q23.00</td>
+                <td class="price">Q22.00</td>
+                <td class="savings">Ahorras Q1.00</td>
+            </tr>
+            <tr>
+                <td>Garrafa (20 L)</td>
+                <td>Q95.00</td>
+                <td class="price">Q82.50</td>
+                <td class="savings">Ahorras Q12.50</td>
+            </tr>
+            <!-- JABÓN TRASTOS -->
+            <tr>
+                <td rowspan="5"><strong>Jabón para Trastos</strong><br><small>Desengrasante: Naranja, Limón</small></td>
+                <td>475 mL (Dispenser)</td>
+                <td>Q15.00</td>
+                <td>—</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>1 Litro</td>
+                <td>Q18.00</td>
+                <td class="price">Q10.00</td>
+                <td class="savings">Ahorras Q8.00</td>
+            </tr>
+            <tr>
+                <td>2 Litros</td>
+                <td>Q30.00</td>
+                <td class="price">Q20.00</td>
+                <td class="savings">Ahorras Q10.00</td>
+            </tr>
+            <tr>
+                <td>Galón (4 L)</td>
+                <td>Q60.00</td>
+                <td class="price">Q40.00</td>
+                <td class="savings">Ahorras Q20.00</td>
+            </tr>
+            <tr>
+                <td>Garrafa (20 L)</td>
+                <td>Q220.00</td>
+                <td class="price">Q180.00</td>
+                <td class="savings">Ahorras Q40.00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- SECCIÓN 2: CUIDADO PERSONAL -->
+    <div class="section-header">2. Productos de Cuidado Personal y Cosmética</div>
+
+    <!-- JABÓN DE MANOS -->
+    <p style="font-size:12px; font-weight:bold; margin-bottom:5px;">🧼 Jabón Líquido para Manos (Fresa Mora, Vainilla Caramelo, Cherry Blackberry, Citrus)</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Presentación</th>
+                <th>Con Envase Nuevo</th>
+                <th>Relleno Directo</th>
+                <th>Ahorro</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>475 grs (Dispensador)</td>
+                <td>Q15.00</td>
+                <td>—</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>1 Litro</td>
+                <td>Q18.00</td>
+                <td class="price">Q10.00</td>
+                <td class="savings">Ahorras Q8.00</td>
+            </tr>
+            <tr>
+                <td>2 Litros</td>
+                <td>Q30.00</td>
+                <td class="price">Q20.00</td>
+                <td class="savings">Ahorras Q10.00</td>
+            </tr>
+            <tr>
+                <td>Galón (4 L)</td>
+                <td>Q60.00</td>
+                <td class="price">Q40.00</td>
+                <td class="savings">Ahorras Q20.00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- CREMAS Y LOCIONES -->
+    <p style="font-size:12px; font-weight:bold; margin-top:15px; margin-bottom:5px;">✨ Lociones y Cremas Corporales VIP (Presentación: 250 mL)</p>
+    <ul class="item-list">
+        <li><span>Loción Corporal Mango Attraction VIP</span> <span class="price">Q80.00</span></li>
+        <li><span>Loción Corporal Kiss Me VIP</span> <span class="price">Q80.00</span></li>
+        <li><span>Loción Corporal Coconut Seduction VIP</span> <span class="price">Q80.00</span></li>
+        <li><span>Loción Corporal I Love Paris VIP</span> <span class="price">Q80.00</span></li>
+        <li><span>Loción Corporal Sweet Vanilla VIP</span> <span class="price">Q80.00</span></li>
+        <li><span>Loción Corporal Just Seduction VIP</span> <span class="price">Q80.00</span></li>
+        <li><span>Loción Corporal 2bella VIP</span> <span class="price">Q80.00</span></li>
+    </ul>
+
+    <!-- SHAMPOO -->
+    <p style="font-size:12px; font-weight:bold; margin-top:15px; margin-bottom:5px;">🧴 Shampoo Capilar VIP (Presentación: Frasco)</p>
+    <ul class="item-list">
+        <li><span>Shampoo Berry VIP</span> <span class="price">Q45.00</span></li>
+        <li><span>Shampoo Coconut Seduction VIP</span> <span class="price">Q45.00</span></li>
+        <li><span>Shampoo Kiss Me VIP</span> <span class="price">Q45.00</span></li>
+        <li><span>Shampoo Just Seduction VIP</span> <span class="price">Q45.00</span></li>
+        <li><span>Shampoo I Love Paris VIP</span> <span class="price">Q45.00</span></li>
+    </ul>
+
+    <!-- SHOWER GEL -->
+    <p style="font-size:12px; font-weight:bold; margin-top:15px; margin-bottom:5px;">🚿 Shower Gel / Gel de Baño VIP (Presentación: Frasco)</p>
+    <ul class="item-list">
+        <li><span>Shower Gel Berry VIP</span> <span class="price">Q50.00</span></li>
+        <li><span>Shower Gel Coconut Seduction VIP</span> <span class="price">Q50.00</span></li>
+        <li><span>Shower Gel Kiss Me VIP</span> <span class="price">Q50.00</span></li>
+        <li><span>Shower Gel Just Seduction VIP</span> <span class="price">Q50.00</span></li>
+        <li><span>Shower Gel I Love Paris VIP</span> <span class="price">Q50.00</span></li>
+    </ul>
+
+    <!-- COSMÉTICA LABIAL Y COMBOS -->
+    <p style="font-size:12px; font-weight:bold; margin-top:15px; margin-bottom:5px;">💄 Cosmética Labial & Combos Especiales</p>
+    <ul class="item-list">
+        <li><span>Lip Gloss Strawberry Addiction (Love Fantasy)</span> <span class="price">Q28.00</span></li>
+        <li><span>Lip Gloss Just Seduction (Love Fantasy)</span> <span class="price">Q28.00</span></li>
+        <li><span>Lip Gloss Sexy Kiss (Love Fantasy)</span> <span class="price">Q28.00</span></li>
+        <li><span><strong>Combo Berry VIP Todo el Día</strong> (Set completo de cuidado personal)</span> <span class="price" style="color:#16a34a;">Q150.00</span></li>
+    </ul>
+
+    <!-- PIE DE PÁGINA -->
+    <div class="footer">
+        BRANOX Guatemala — Calidad y Rendimiento Garantizado.<br>
+        Consulte precios especiales para compras por volumen o garrafas de 20 Litros.
+    </div>
+
+</div>
+
 </body>
 </html>
